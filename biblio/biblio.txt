@@ -1,0 +1,29 @@
+
+Blog
+
+http://tim.hibal.org/blog/alpha-zero-how-and-why-it-works/
+https://web.stanford.edu/~surag/posts/alphazero.html
+https://chess.stackexchange.com/questions/37468/was-alphazero-taught-castling
+ 
+
+Git
+
+https://github.com/DylanSnyder31/AlphaZero-Chess
+https://github.com/petosa/simple-alpha-zero
+https://github.com/tmoer/alphazero_singleplayer
+https://github.com/geochri/AlphaZero_Chess
+
+le meilleur :
+https://github.com/arjangroen/RLC/tree/master/RLC/real_chess
+
+Papers
+
+https://www.nature.com/articles/nature24270.epdf?author_access_token=VJXbVjaSHxFoctQQ4p2k4tRgN0jAjWel9jnR3ZoTv0PVW4gB86EEpGqTRDtpIz-2rmo8-KG06gqVobU5NSCFeHILHcVFUeMsbvwS-lxjqQGg98faovwjxeTUgZAUMnRQ
+
++ les deux papiers en pdf
+
+
+
+Librairies
+
+https://python-chess.readthedocs.io/en/latest/core.html

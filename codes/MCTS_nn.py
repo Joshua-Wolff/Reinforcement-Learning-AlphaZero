@@ -59,8 +59,8 @@ class mcts_nn():
   
         for ancestor in leaf.iter_path_reverse(): # rétropropagation du résultat issu de la simulation
             ancestor.N += 1
-            ancestor.W += v
-            
+            ancestor.V += v
+
         self.current_position = self.initial_position.copy()
 
         return

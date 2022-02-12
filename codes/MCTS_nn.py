@@ -15,12 +15,12 @@ class node_nn(NodeMixin):
         self.prob = prob
         self.parent = parent
 
-    def score(self,white_to_play):
+    def score(self,white_to_play,move_nb):
         if white_to_play:
             relative_V = self.V
         else:
             relative_V = -self.V
-        return relative_V/(self.N or 1) + 5*self.prob * np.sqrt(self.parent.N) / (1 + self.N)
+        return relative_V/(self.N or 1) + (1/move_nb)**2 * self.prob * np.sqrt(self.parent.N) / (1 + self.N)
         
 
 class mcts_nn():
@@ -36,7 +36,8 @@ class mcts_nn():
         current_node = self.root # we start from the root
         while current_node.is_leaf is not True: # check if we are in a leaf
             white_to_play = self.current_position.turn
-            score = [child.score(white_to_play) for child in current_node.children] # list of scores for the node's children
+            move_nb = self.current_position.fullmove_number
+            score = [child.score(white_to_play,move_nb) for child in current_node.children] # list of scores for the node's children
             index = sample([i for i, j in enumerate(score) if j == max(score)],1)[0] # si plusieurs max tirage au hasard
             current_node = current_node.children[index] # the best children (with maximal UCT) becomes the current node
             self.current_position.push(current_node.move) # mise à jour de la position courante pour la phase d'expansion / simulation

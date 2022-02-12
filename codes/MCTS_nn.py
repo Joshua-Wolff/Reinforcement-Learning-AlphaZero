@@ -52,7 +52,7 @@ class mcts_nn():
             v = v[0,0]
             leaf.V += v
             for move in legal_moves: # création des nouveaux noeuds correspondants aux coups légaux
-                prob = p[self.moves == move]
+                prob = p[self.moves.index(move)]
                 node_nn(move=move,parent=leaf,prob=prob)
         return leaf, v
 

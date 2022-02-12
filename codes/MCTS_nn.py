@@ -20,7 +20,7 @@ class node_nn(NodeMixin):
             relative_V = self.V
         else:
             relative_V = -self.V
-        return relative_V/(self.N or 1) + (1/(self.N+1))*self.prob * np.sqrt(self.parent.N) / (1 + self.N)
+        return relative_V/(self.N or 1) + 0.5*self.prob * np.sqrt(self.parent.N) / (1 + self.N)
         
 
 class mcts_nn():
@@ -42,7 +42,7 @@ class mcts_nn():
         leaf = current_node # the current node is a leaf by definition
         return leaf
 
-    def expansion(self,leaf): 
+    def expansion_backprop(self,leaf): 
         outcome = self.current_position.outcome() 
         #EXPANSION
         legal_moves = self.current_position.legal_moves # génération des coups légaux
@@ -54,14 +54,11 @@ class mcts_nn():
             for move in legal_moves: # création des nouveaux noeuds correspondants aux coups légaux
                 prob = p[self.moves.index(move)]
                 node_nn(move=move,parent=leaf,prob=prob)
-        return leaf, v
 
-    def backpropagation(self, leaf, v): # we backpropagate information through the tree
-  
-        for ancestor in leaf.iter_path_reverse(): # rétropropagation du résultat issu de la simulation
-            ancestor.N += 1
-            ancestor.V += v
+            # BACKPROPAGATION
+            for ancestor in leaf.iter_path_reverse(): # rétropropagation du résultat issu de la simulation
+                ancestor.N += 1
+                ancestor.V += v
 
         self.current_position = self.initial_position.copy()
-
-        return
+        return 

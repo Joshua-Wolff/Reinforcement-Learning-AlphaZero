@@ -4,7 +4,7 @@ import chess
 from random import sample
 from utils import *
 from nn import *
-
+from numpy.random import dirichlet
 
 class node_nn(NodeMixin):
 
@@ -20,7 +20,7 @@ class node_nn(NodeMixin):
             relative_V = self.V
         else:
             relative_V = -self.V
-        return relative_V/(self.N or 1) + 0.05*self.prob * np.sqrt(self.parent.N) / (1 + self.N)
+        return relative_V/(self.N or 1) + 1.5*self.prob * np.sqrt(self.parent.N) / (1 + self.N)
         
 
 class mcts_nn():
@@ -48,6 +48,7 @@ class mcts_nn():
         #EXPANSION
         legal_moves = self.current_position.legal_moves # génération des coups légaux
         if outcome is None: # si la partie n'est pas terminée
+            dirichlet_noise, inc = dirichlet([0.03]*legal_moves.count()), 0
             p,v = evaluate_position(self.model, self.current_position)
             p = p[0] # juste pour des questions de dimensions
             v = v[0,0]
@@ -57,6 +58,8 @@ class mcts_nn():
                     prob = p[self.moves_w.index(move)]
                 else : 
                     prob = p[self.moves_b.index(move)]
+                prob = 0.75 * prob + 0.25 * dirichlet_noise[inc]
+                inc += 1
                 node_nn(move=move,parent=leaf,prob=prob)
 
             # BACKPROPAGATION

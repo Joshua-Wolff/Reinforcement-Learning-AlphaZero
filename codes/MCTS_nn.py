@@ -20,7 +20,7 @@ class node_nn(NodeMixin):
             relative_V = self.V
         else:
             relative_V = -self.V
-        return relative_V/(self.N or 1) + 0.5*self.prob * np.sqrt(self.parent.N) / (1 + self.N)
+        return relative_V/(self.N or 1) + 0.05*self.prob * np.sqrt(self.parent.N) / (1 + self.N)
         
 
 class mcts_nn():

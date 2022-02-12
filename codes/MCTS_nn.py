@@ -29,7 +29,8 @@ class mcts_nn():
         self.current_position = position.copy()
         self.root = node_nn() # create the tree root, that correspond to initial_position
         self.model = load_model() # load nn model from nn.py
-        self.moves = [chess.Move.from_uci(move) for move in create_uci_labels()]
+        self.moves_w = [chess.Move.from_uci(move) for move in create_uci_labels()]
+        self.moves_b = [chess.Move.from_uci(move) for move in flipped_uci_labels()]
 
     def selection(self): # we reach a leaf using score selection
         current_node = self.root # we start from the root
@@ -52,7 +53,10 @@ class mcts_nn():
             v = v[0,0]
             leaf.V += v
             for move in legal_moves: # création des nouveaux noeuds correspondants aux coups légaux
-                prob = p[self.moves.index(move)]
+                if self.current_position.turn : 
+                    prob = p[self.moves_w.index(move)]
+                else : 
+                    prob = p[self.moves_b.index(move)]
                 node_nn(move=move,parent=leaf,prob=prob)
 
             # BACKPROPAGATION

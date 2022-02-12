@@ -46,9 +46,10 @@ class mcts_nn():
         outcome = self.current_position.outcome() 
         #EXPANSION
         legal_moves = self.current_position.legal_moves # génération des coups légaux
-        child_node = None # juste pour ne pas bugger la fin de partie
         if outcome is None: # si la partie n'est pas terminée
             p,v = evaluate_position(self.model, self.current_position)
+            p = p[0] # juste pour des questions de dimensions
+            v = v[0,0]
             leaf.V += v
             for move in legal_moves: # création des nouveaux noeuds correspondants aux coups légaux
                 prob = p[self.moves == move]

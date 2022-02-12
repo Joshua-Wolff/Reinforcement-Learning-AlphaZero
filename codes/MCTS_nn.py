@@ -1,5 +1,6 @@
 from anytree import NodeMixin
 import numpy as np
+from numpy.random import dirichlet
 import chess
 from random import sample
 from utils import *
@@ -20,7 +21,7 @@ class node_nn(NodeMixin):
             relative_V = self.V
         else:
             relative_V = -self.V
-        return relative_V/(self.N or 1) + 0.1*self.prob * np.sqrt(self.parent.N) / (1 + self.N)
+        return relative_V/(self.N or 1) + 1.5*self.prob * np.sqrt(self.parent.N) / (1 + self.N)
         
 
 class mcts_nn():
@@ -46,6 +47,8 @@ class mcts_nn():
         outcome = self.current_position.outcome() 
         #EXPANSION
         legal_moves = self.current_position.legal_moves # génération des coups légaux
+        dirichlet_noise = dirichlet([0.3]*legal_moves.count())
+        inc = 0
         if outcome is None: # si la partie n'est pas terminée
             p,v = evaluate_position(self.model, self.current_position)
             p = p[0] # juste pour des questions de dimensions
@@ -53,6 +56,9 @@ class mcts_nn():
             leaf.V += v
             for move in legal_moves: # création des nouveaux noeuds correspondants aux coups légaux
                 prob = p[self.moves.index(move)]
+                if leaf == self.root : # ajout de bruit dirichlet
+                    prob = 0.75 * prob + 0.25 * dirichlet_noise[inc] 
+                    inc += 1
                 node_nn(move=move,parent=leaf,prob=prob)
         return leaf, v
 
